@@ -5,95 +5,373 @@
 //when question is answered incorectly, time is subtracted from clock 
 //When all questions are answered or the timer reaches 0 the game is over
 //When the game is over then I can save my intial score 
-var questionsArr = [{
-    prompt: "What is JavaScript",
-    options: [{
-        value: "",
-        correct: true
-    }, {
-        value: "The same as Java",
-        correct: false
-    }, {
-        value: "",
-        correct: false
-    }, {
-        value: "Arthur",
-        correct: false
+
+var quizBody = document.getElementById("quiz");
+var resultsEl = document.getElementById("result");
+var finalScoreEl = document.getElementById("finalScore");
+var gameoverDiv = document.getElementById("gameover");
+var questionsEl = document.getElementById("questions");
+var quizTimer = document.getElementById("timer");
+var startQuizButton = document.getElementById("startbtn");
+var startQuizDiv = document.getElementById("startpage");
+var highscoreContainer = document.getElementById("highscoreContainer");
+var highscoreDiv = document.getElementById("high-scorePage");
+var highscoreInputName = document.getElementById("initials");
+var highscoreDisplayName = document.getElementById("highscore-initials");
+var endGameBtns = document.getElementById("endGameBtns");
+var submitScoreBtn = document.getElementById("submitScore");
+var highscoreDisplayScore = document.getElementById("highscore-score");
+var buttonA = document.getElementById("a");
+var buttonB = document.getElementById("b");
+var buttonC = document.getElementById("c");
+var buttonD = document.getElementById("d");
+
+var quizQuestions = [{
+
+    question: "How many elements can you apply an 'ID' attribute to?",
+
+    choiceA: "As many as you want",
+
+    choiceB: "3",
+
+    choiceC: "1",
+
+    choiceD: "128",
+
+    correctAnswer: "c"
+},
+
+{
+
+    question: "What does DOM stand for?",
+
+    choiceA: "Document Object Model",
+
+    choiceB: "Display Object Management",
+
+    choiceC: "Digital Ordinance Model",
+
+    choiceD: "Desktop Oriented Mode",
+
+    correctAnswer: "a"
+},
+
+{
+
+    question: "What is used primarily to add styling to a web page?",
+
+    choiceA: "HTML",
+
+    choiceB: "CSS",
+
+    choiceC: "Python",
+
+    choiceD: "React.js",
+
+    correctAnswer: "b"
+},
+
+{
+
+    question: "What HTML tags are JavaScript code wrapped in?",
+
+    choiceA: "&lt;div&gt;",
+
+    choiceB: "&lt;link&gt;",
+
+    choiceC: "&lt;head&gt;",
+
+    choiceD: "&lt;script&gt;",
+
+    correctAnswer: "d"
+},
+
+{
+
+    question: "When is localStorage data cleared?",
+
+    choiceA: "No expiration time",
+
+    choiceB: "On page reload",
+
+    choiceC: "On browser close",
+
+    choiceD: "On computer restart",
+
+    correctAnswer: "a"
+},
+
+{
+
+    question: "What does WWW stand for?",
+
+    choiceA: "Web World Workings",
+
+    choiceB: "Weak Winter Wind",
+
+    choiceC: "World Wide Web",
+
+    choiceD: "Wendy Wants Waffles",
+
+    correctAnswer: "c"
+},
+
+{
+
+    question: "What HTML attribute references an external JavaScript file?",
+
+    choiceA: "href",
+
+    choiceB: "src",
+
+    choiceC: "class",
+
+    choiceD: "index",
+
+    correctAnswer: "b"
+},
+
+
+
+
+
+];
+
+
+var finalQuestionIndex = quizQuestions.length;
+
+var currentQuestionIndex = 0;
+
+var timeLeft = 76;
+
+var timerInterval;
+
+var score = 0;
+
+var correct;
+
+function generateQuizQuestion() {
+
+    gameoverDiv.style.display = "none";
+
+    if (currentQuestionIndex === finalQuestionIndex) {
+
+        return showScore();
+
     }
-    ]
-}, {
-    prompt: "What's my last name",
-    options: [{
-        value: "Ja234ck",
-        correct: false
-    }, {
-        value: "Al324ex",
-        correct: false
-    }, {
-        value: "Killeen",
-        correct: true
-    }, {
-        value: "Arth234ur",
-        correct: false
-    }
-    ]
-}
-]
-var currentIndex;
 
-function startQuiz(){
-    //start your timer
-    startButton.addEventListener("click", function() {
-        chosenWord = (words[Math.floor(Math.random() * words.length)]).split("");
-        numBlanks = chosenWord.map(char => "_");
+    var currentQuestion = quizQuestions[currentQuestionIndex];
 
-        wordBlank.textContent = numBlanks.join(" ");
+    questionsEl.innerHTML = "<p>" + currentQuestion.question + "</p>";
 
-        timer = setInterval(function() {
-            timerCount--;
-            timerElement.textContent = timerCount;
-    
-        }, 1000)
-    });
-    //adjust any elements (show or hide)
+    buttonA.innerHTML = currentQuestion.choiceA;
 
-    currentIndex = 0
-    showQuestion()
-}
+    buttonB.innerHTML = currentQuestion.choiceB;
 
-function showQuestion(){
-    var currentQuestion = questionsArr[currentIndex].prompt
-    console.log(currentQuestion)
-    for(let i=0; i< questionsArr[currentIndex].options.length; i++){
-        var button = document.createElement("button")
-        button.innerHTML = questionsArr[currentIndex].options[i].value
-        if(questionsArr[currentIndex].options[i].correct === true){
-            button.setAttribute("correct", "true")    
+    buttonC.innerHTML = currentQuestion.choiceC;
+
+    buttonD.innerHTML = currentQuestion.choiceD;
+
+};
+
+function startQuiz() {
+
+    gameoverDiv.style.display = "none";
+
+    startQuizDiv.style.display = "none";
+
+    generateQuizQuestion();
+
+    //Timer
+
+    timerInterval = setInterval(function () {
+
+        timeLeft--;
+
+        quizTimer.textContent = "Time left: " + timeLeft;
+
+
+
+        if (timeLeft === 0) {
+
+            clearInterval(timerInterval);
+
+            showScore();
+
         }
-        button.addEventListener("click", checkAnswer)
+
+    }, 1000);
+
+    quizBody.style.display = "block";
+
 }
 
- 
+
+function showScore() {
+
+    quizBody.style.display = "none"
+
+    gameoverDiv.style.display = "flex";
+
+    clearInterval(timerInterval);
+
+    highscoreInputName.value = "";
+
+    finalScoreEl.innerHTML = "You got " + score + " out of " + quizQuestions.length + " correct!";
+
 }
-function checkAnswer(event){
-    event.preventDefault()
-    console.log(event)
-    console.log(event.target)
-    console.log(this)
 
-    //if this and event.target are an HTML node, how can we check for our custom attribute to see if it's right or wrong?
 
-    if(questionsArr.length - 1 === currentIndex){
-        endQuiz()
+submitScoreBtn.addEventListener("click", function highscore() {
+
+
+
+
+
+    if (highscoreInputName.value === "") {
+
+        alert("Initials cannot be blank");
+
+        return false;
+
     } else {
-        currentIndex++
-        showQuestion()
+
+        var savedHighscores = JSON.parse(localStorage.getItem("savedHighscores")) || [];
+
+        var currentUser = highscoreInputName.value.trim();
+
+        var currentHighscore = {
+
+            name: currentUser,
+
+            score: score
+
+        };
+
+
+
+        gameoverDiv.style.display = "none";
+
+        highscoreContainer.style.display = "flex";
+
+        highscoreDiv.style.display = "block";
+
+        endGameBtns.style.display = "flex";
+
+
+
+        savedHighscores.push(currentHighscore);
+
+        localStorage.setItem("savedHighscores", JSON.stringify(savedHighscores));
+
+        generateHighscores();
+
     }
+
+
+
+});
+
+function generateHighscores() {
+
+    highscoreDisplayName.innerHTML = "";
+
+    highscoreDisplayScore.innerHTML = "";
+
+    var highscores = JSON.parse(localStorage.getItem("savedHighscores")) || [];
+
+    for (i = 0; i < highscores.length; i++) {
+
+        var newNameSpan = document.createElement("li");
+
+        var newScoreSpan = document.createElement("li");
+
+        newNameSpan.textContent = highscores[i].name;
+
+        newScoreSpan.textContent = highscores[i].score;
+
+        highscoreDisplayName.appendChild(newNameSpan);
+
+        highscoreDisplayScore.appendChild(newScoreSpan);
+
+    }
+
 }
 
+function showHighscore() {
 
-function endQuiz(){
-    console.log("Ending quiz!")
+    startQuizDiv.style.display = "none"
+
+    gameoverDiv.style.display = "none";
+
+    highscoreContainer.style.display = "flex";
+
+    highscoreDiv.style.display = "block";
+
+    endGameBtns.style.display = "flex";
+
+    generateHighscores();
+
 }
 
-startQuiz()
+function clearScore() {
+
+    window.localStorage.clear();
+
+    highscoreDisplayName.textContent = "";
+
+    highscoreDisplayScore.textContent = "";
+
+}
+
+function replayQuiz() {
+
+    highscoreContainer.style.display = "none";
+
+    gameoverDiv.style.display = "none";
+
+    startQuizDiv.style.display = "flex";
+
+    timeLeft = 76;
+
+    score = 0;
+
+    currentQuestionIndex = 0;
+
+}
+
+function checkAnswer(answer) {
+
+    correct = quizQuestions[currentQuestionIndex].correctAnswer;
+
+    if (answer === correct && currentQuestionIndex !== finalQuestionIndex) {
+
+        score++;
+
+        alert("That Is Correct!");
+
+        currentQuestionIndex++;
+
+        generateQuizQuestion();
+
+        //display in the results div that the answer is correct.
+
+    } else if (answer !== correct && currentQuestionIndex !== finalQuestionIndex) {
+
+        alert("That Is Incorrect.")
+
+        currentQuestionIndex++;
+
+        generateQuizQuestion();
+
+        //display in the results div that the answer is wrong.
+
+    } else {
+
+        showScore();
+
+    }
+
+}
+
+startQuizButton.addEventListener("click", startQuiz);
