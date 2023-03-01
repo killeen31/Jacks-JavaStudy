@@ -26,114 +26,109 @@ var buttonB = document.getElementById("b");
 var buttonC = document.getElementById("c");
 var buttonD = document.getElementById("d");
 
-var quizQuestions = [{
+var quizQuestions = [
+    {
+        question: "How many elements can you apply an 'ID' attribute to?",
 
-    question: "How many elements can you apply an 'ID' attribute to?",
+        choiceA: "As many as you want",
 
-    choiceA: "As many as you want",
+        choiceB: "3",
 
-    choiceB: "3",
+        choiceC: "1",
 
-    choiceC: "1",
+        choiceD: "128",
 
-    choiceD: "128",
+        correctAnswer: "c"
+    },
+    {
 
-    correctAnswer: "c"
-},
+        question: "What does DOM stand for?",
 
-{
+        choiceA: "Document Object Model",
 
-    question: "What does DOM stand for?",
+        choiceB: "Display Object Management",
 
-    choiceA: "Document Object Model",
+        choiceC: "Digital Ordinance Model",
 
-    choiceB: "Display Object Management",
+        choiceD: "Desktop Oriented Mode",
 
-    choiceC: "Digital Ordinance Model",
+        correctAnswer: "a"
+    },
 
-    choiceD: "Desktop Oriented Mode",
+    {
 
-    correctAnswer: "a"
-},
+        question: "What is used primarily to add styling to a web page?",
 
-{
+        choiceA: "HTML",
 
-    question: "What is used primarily to add styling to a web page?",
+        choiceB: "CSS",
 
-    choiceA: "HTML",
+        choiceC: "Python",
 
-    choiceB: "CSS",
+        choiceD: "React.js",
 
-    choiceC: "Python",
+        correctAnswer: "b"
+    },
 
-    choiceD: "React.js",
+    {
 
-    correctAnswer: "b"
-},
+        question: "What HTML tags are JavaScript code wrapped in?",
 
-{
+        choiceA: "&lt;div&gt;",
 
-    question: "What HTML tags are JavaScript code wrapped in?",
+        choiceB: "&lt;link&gt;",
 
-    choiceA: "&lt;div&gt;",
+        choiceC: "&lt;head&gt;",
 
-    choiceB: "&lt;link&gt;",
+        choiceD: "&lt;script&gt;",
 
-    choiceC: "&lt;head&gt;",
+        correctAnswer: "d"
+    },
 
-    choiceD: "&lt;script&gt;",
+    {
 
-    correctAnswer: "d"
-},
+        question: "When is localStorage data cleared?",
 
-{
+        choiceA: "No expiration time",
 
-    question: "When is localStorage data cleared?",
+        choiceB: "On page reload",
 
-    choiceA: "No expiration time",
+        choiceC: "On browser close",
 
-    choiceB: "On page reload",
+        choiceD: "On computer restart",
 
-    choiceC: "On browser close",
+        correctAnswer: "a"
+    },
 
-    choiceD: "On computer restart",
+    {
 
-    correctAnswer: "a"
-},
+        question: "What does WWW stand for?",
 
-{
+        choiceA: "Web World Workings",
 
-    question: "What does WWW stand for?",
+        choiceB: "Weak Winter Wind",
 
-    choiceA: "Web World Workings",
+        choiceC: "World Wide Web",
 
-    choiceB: "Weak Winter Wind",
+        choiceD: "Wendy Wants Waffles",
 
-    choiceC: "World Wide Web",
+        correctAnswer: "c"
+    },
 
-    choiceD: "Wendy Wants Waffles",
+    {
 
-    correctAnswer: "c"
-},
+        question: "What HTML attribute references an external JavaScript file?",
 
-{
+        choiceA: "href",
 
-    question: "What HTML attribute references an external JavaScript file?",
+        choiceB: "src",
 
-    choiceA: "href",
+        choiceC: "class",
 
-    choiceB: "src",
+        choiceD: "index",
 
-    choiceC: "class",
-
-    choiceD: "index",
-
-    correctAnswer: "b"
-},
-
-
-
-
+        correctAnswer: "b"
+    }
 
 ];
 
@@ -225,10 +220,7 @@ function showScore() {
 submitScoreBtn.addEventListener("click", function highscore() {
 
 
-
-
-
-    if (highscoreInputName.value === "") {
+     if (highscoreInputName.value === "") {
 
         alert("Initials cannot be blank");
 
@@ -363,6 +355,17 @@ function checkAnswer(answer) {
         currentQuestionIndex++;
 
         generateQuizQuestion();
+
+        timeLeft -= 10;
+        quizTimer.textContent = "Time left: " + timeLeft;
+        if (timeLeft === 0) {
+
+            clearInterval(timerInterval);
+
+            showScore();
+
+        }
+
 
         //display in the results div that the answer is wrong.
 
